@@ -17,11 +17,17 @@ Category Edit
                     <div class="col-md-6 form-group">
                         <label for="name">Category Name</label>
                         <input type="text" class="form-control" name="name" id="name" value="{{$category->name}}" placeholder="Enter Category name Here..">
+                        @error('name')
+                            <span class="text text-danger">{{$message}}</span>
+                        @enderror
                     </div>
                     <div class="col-md-6 form-group">
                         <label for="description">Category Description</label>
                         <!-- <input type="text" class="form-control" name="description" id="description" placeholder="Enter Category description Here.."> -->
                         <textarea name="description" id="description" class="form-control" rows="2" placeholder="Enter Category description Here..">{{$category->description}}</textarea>
+                        @error('description')
+                            <span class="text text-danger">{{$message}}</span>
+                        @enderror
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">

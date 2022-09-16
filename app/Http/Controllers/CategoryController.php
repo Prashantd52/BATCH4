@@ -6,6 +6,7 @@ use App\Category;
 use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
+use Session;
 
 class CategoryController extends Controller
 {
@@ -18,6 +19,9 @@ class CategoryController extends Controller
     {
         // echo "Hello";
         $categories=Category::get();
+
+        // session()->forget('message');
+        // dd(session('message'));
         return view('Category.index',compact('categories'));    //->withCategories($categories);
     }
 
@@ -40,8 +44,10 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        // dd($request);
+        $request->validate([
+            'name'=>'required |unique:categories,name',
+            'description'=>'required|min:10',
+        ]);
 
         /*$category= new Category;
 
@@ -57,6 +63,7 @@ class CategoryController extends Controller
             'updated_at'=>Date('Y-m-d H:i:s'),
         ]);
 
+        session()->flash('success','Category Created Succesfully');
         return redirect()->route('c.index');
     }
 
@@ -99,6 +106,10 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         // dd($request);
+        $request->validate([
+            'name'=>'required |unique:categories,name,'.$request->category_id,
+            'description'=>'required|min:10',
+        ]);
         $Existingcategory=Category::where('id',$request->category_id)->first();
         if($Existingcategory)
         {
@@ -107,11 +118,13 @@ class CategoryController extends Controller
 
             $Existingcategory->save();
 
+            Session::put('message','Category Found');
             return redirect()->route('c.index');
         }
         else
         {
-            return "Category Not Found";
+            Session::put('message','Category Not Found');
+            return redirect()->route('c.index');
         }
 
     }
@@ -124,11 +137,9 @@ class CategoryController extends Controller
      */
     public function destroy(request $request,Category $category)
     {
-        //
         // dd($request);
-       Category::where('id',$request->category_id)->delete();
-
-
+        Category::where('id',$request->category_id)->delete();
+        session()->flash('danger','Category Deleted Succesfully');
         return redirect()->back();
     }
 }
