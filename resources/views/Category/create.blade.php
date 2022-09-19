@@ -18,7 +18,7 @@ Category Create
             </ul>
             </div>
             @endif
-            <form action="{{route('c.store')}}" method="POST">
+            <form action="{{route('c.store')}}" method="POST" enctype="multipart/form-data">
                 @csrf()
                 @method('post')
                 <div class="row">
@@ -36,6 +36,11 @@ Category Create
                         @error('description')
                             <span class="text text-danger">{{$message}}</span>
                         @enderror
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="file" name="image" value="" class="form-cntrol">
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">

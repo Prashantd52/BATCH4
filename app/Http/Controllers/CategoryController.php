@@ -44,6 +44,8 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
+        $filePath="";
         $request->validate([
             'name'=>'required |unique:categories,name',
             'description'=>'required|min:10',
@@ -56,9 +58,17 @@ class CategoryController extends Controller
 
         $category->save();*/
 
+        if($request->file('image'))
+        {
+            $destinationPath='/images/category/';
+            $filePath= $this->upload_file($request->file('image'),$destinationPath);
+        }
+
+        // dd($filePath);
         DB::table('categories')->insert([
             'name'=>$request->name,
             'description'=>$request->description,
+            'file_path'=> $filePath,
             'created_at'=>Carbon::now(),
             'updated_at'=>Date('Y-m-d H:i:s'),
         ]);
@@ -141,5 +151,20 @@ class CategoryController extends Controller
         Category::where('id',$request->category_id)->delete();
         session()->flash('danger','Category Deleted Succesfully');
         return redirect()->back();
+    }
+
+
+    private function upload_file($file,$path)
+    {
+        $tempName=time();
+
+        $extension=$file->getClientOriginalExtension();
+        $fileName=$tempName.'.'.$extension;
+
+        //$path=$file->move('destination path','file name');
+        $path=$file->move(public_path($path),$fileName);
+
+        // echo $path;
+        return str_replace(public_path(),'',$path);
     }
 }
