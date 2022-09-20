@@ -39,6 +39,7 @@ Category Index &nbsp;<a href="{{route('c.create')}}">+</a>
                     @endforeach
                 </tbody>
         </table>
+        {{$categories->links()}}
     </div>
 </div>
 @endsection

@@ -1,13 +1,14 @@
 Topics to Cover
 Crud ✔
-Select2 
+File Upload ✔
 Auth Routes ✔
 Server side validation  ✔
 Session  ✔
+Pagination ✔
+Relation
+Select2 
 Factory/Seeder 
-Pagination 
 Search 
 Soft Delete 
 Slug 
-File Upload
 Middleware

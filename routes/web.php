@@ -35,3 +35,5 @@ Route::post('category/store','CategoryController@store')->name('c.store');
 Route::get('category/edit/{category}','CategoryController@edit')->name('c.edit');
 Route::post('category/update','CategoryController@update')->name('c.update');
 Route::post('Category/delete','CategoryController@destroy')->name('c.delete');
+
+Route::get('category/show/{category}','CategoryController@show')->name('c.show');

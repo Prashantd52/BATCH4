@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
 use Session;
+use App\Traits\ResponseTrait;
 
 class CategoryController extends Controller
 {
+    use ResponseTrait;
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +20,7 @@ class CategoryController extends Controller
     public function index()
     {
         // echo "Hello";
-        $categories=Category::get();
+        $categories=Category::paginate(5);
 
         // session()->forget('message');
         // dd(session('message'));
@@ -60,7 +62,7 @@ class CategoryController extends Controller
 
         if($request->file('image'))
         {
-            $destinationPath='/images/category/';
+            $destinationPath='/images/category';
             $filePath= $this->upload_file($request->file('image'),$destinationPath);
         }
 
@@ -86,6 +88,8 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         //
+        return view('Category.show',compact('category'));
+
     }
 
     /**
@@ -154,17 +158,4 @@ class CategoryController extends Controller
     }
 
 
-    private function upload_file($file,$path)
-    {
-        $tempName=time();
-
-        $extension=$file->getClientOriginalExtension();
-        $fileName=$tempName.'.'.$extension;
-
-        //$path=$file->move('destination path','file name');
-        $path=$file->move(public_path($path),$fileName);
-
-        // echo $path;
-        return str_replace(public_path(),'',$path);
-    }
 }
