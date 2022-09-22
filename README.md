@@ -5,10 +5,10 @@ Auth Routes ✔
 Server side validation  ✔
 Session  ✔
 Pagination ✔
+Search ✔
+Middleware ✔
 Relation
 Select2 
-Factory/Seeder 
-Search 
 Soft Delete 
+Factory/Seeder 
 Slug 
-Middleware

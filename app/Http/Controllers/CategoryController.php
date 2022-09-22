@@ -12,19 +12,23 @@ use App\Traits\ResponseTrait;
 class CategoryController extends Controller
 {
     use ResponseTrait;
+
+    public function __construct()
+    {
+        // $this->middleware('auth')->except('index');
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        // dd($request);
+        $search=$request->search?$request->search:'';
         // echo "Hello";
-        $categories=Category::paginate(5);
-
-        // session()->forget('message');
-        // dd(session('message'));
-        return view('Category.index',compact('categories'));    //->withCategories($categories);
+        $categories=Category::where('name','LIKE','%'.$search.'%')->paginate(3);
+        return view('Category.index',compact('categories','search'));    //->withCategories($categories);
     }
 
     /**
@@ -53,27 +57,30 @@ class CategoryController extends Controller
             'description'=>'required|min:10',
         ]);
 
-        /*$category= new Category;
-
-        $category->name= $request->name;
-        $category->description=$request->description;
-
-        $category->save();*/
-
         if($request->file('image'))
         {
             $destinationPath='/images/category';
             $filePath= $this->upload_file($request->file('image'),$destinationPath);
         }
 
+        $category= new Category;
+
+        $category->name= $request->name;
+        $category->description=$request->description;
+        $category->file_path=$filePath;
+
+        $category->save();
+
+        
+
         // dd($filePath);
-        DB::table('categories')->insert([
+        /*DB::table('categories')->insert([
             'name'=>$request->name,
             'description'=>$request->description,
             'file_path'=> $filePath,
             'created_at'=>Carbon::now(),
             'updated_at'=>Date('Y-m-d H:i:s'),
-        ]);
+        ]);*/
 
         session()->flash('success','Category Created Succesfully');
         return redirect()->route('c.index');

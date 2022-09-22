@@ -1,9 +1,19 @@
 @extends('layouts.app')
 @section('navtitle')
-Category Index &nbsp;<a href="{{route('c.create')}}">+</a>
+Category Index &nbsp;@auth<a href="{{route('c.create')}}">+</a>@endauth
 @endsection
 
 @section('content')
+<div class="row">
+    <div class="col"></div>
+    <div class=" row col-md-3">
+        <form action="{{route('c.index')}}" method="post">
+            @method('get')
+            <input type="text" value="{{$search}}" name="search" class="col-sm-11" placeholder="Enter search term">
+            <button  type="submit" ><i >&#128269;</i></button>
+        </form>
+    </div>
+</div>
  
 <div class="container">
     <div class="table">
