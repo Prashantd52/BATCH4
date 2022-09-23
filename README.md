@@ -7,8 +7,8 @@ Session  ✔
 Pagination ✔
 Search ✔
 Middleware ✔
+Soft Delete 
 Relation
 Select2 
-Soft Delete 
 Factory/Seeder 
 Slug 

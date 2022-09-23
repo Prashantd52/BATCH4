@@ -40,3 +40,5 @@ Route::post('category/update','CategoryController@update')->name('c.update');
 Route::post('Category/delete','CategoryController@destroy')->name('c.delete');
 
 Route::get('category/show/{category}','CategoryController@show')->name('c.show');
+Route::get('category/deleted_categories','CategoryController@deleted_categories');
+Route::get('category/restore_categories/{id}','CategoryController@restore_categories')->name('c.restore');

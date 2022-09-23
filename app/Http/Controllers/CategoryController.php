@@ -27,7 +27,10 @@ class CategoryController extends Controller
         // dd($request);
         $search=$request->search?$request->search:'';
         // echo "Hello";
-        $categories=Category::where('name','LIKE','%'.$search.'%')->paginate(3);
+        if($search)
+            $categories=Category::where('name','LIKE','%'.$search.'%')->get();
+        else
+            $categories=Category::paginate(5);
         return view('Category.index',compact('categories','search'));    //->withCategories($categories);
     }
 
@@ -156,13 +159,40 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(request $request,Category $category)
+    public function destroy(request $request)
     {
         // dd($request);
-        Category::where('id',$request->category_id)->delete();
-        session()->flash('danger','Category Deleted Succesfully');
+        $category=Category::where('id',$request->category_id)->withTrashed()->first();
+        if($category->deleted_at)
+        {
+            $category->forceDelete();
+            session()->flash('danger','Category permanently Deleted Succesfully');
+        }
+        else
+        {
+            $category->delete();
+            session()->flash('danger','Category Deleted Succesfully');
+        }
+        
         return redirect()->back();
     }
 
 
+    public function deleted_categories()
+    {
+        $categories=Category::onlyTrashed()->get();
+
+        return view('Category.index',compact('categories'));
+    }
+
+    public function restore_categories($id)
+    {
+        $category=Category::onlyTrashed()->where('id',$id)->first();
+        if($category)
+        {
+            $category->restore();
+            session()->flash('success','Category Restored Succesfully');
+        }
+        return redirect()->route('c.index');
+    }
 }
